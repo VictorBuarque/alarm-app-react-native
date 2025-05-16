@@ -14,6 +14,7 @@ interface TimerProps {
 interface TimerState {
   clockNumber: number;
   timer: any;
+  lastTime: number;
   imageSource: ImageSourcePropType;
   button: string;
 }
@@ -27,6 +28,7 @@ export default class App extends Component<TimerProps, TimerState> {
       imageSource: this.clock,
       button: "Start",
       timer: null,
+      lastTime: 0,
     };
     this.start = this.start.bind(this);
     this.clear = this.clear.bind(this);
@@ -54,6 +56,7 @@ export default class App extends Component<TimerProps, TimerState> {
     }
 
     this.setState({
+      lastTime: this.state.clockNumber || 0,
       clockNumber: 0,
       timer: null,
       button: "Start",
@@ -66,12 +69,15 @@ export default class App extends Component<TimerProps, TimerState> {
         <View style={styles.header}>
           <Text style={styles.text}>Timer</Text>
         </View>
-        
+
         <View style={styles.imageContainer}>
           <Image source={this.state.imageSource} style={styles.image} />
           <Text style={styles.timer}>{this.state.clockNumber.toFixed(1)}</Text>
+          <View style={styles.header}>
+            <Text style={styles.text}>Last Time: {this.state.lastTime.toFixed(2)}</Text>
+          </View>
         </View>
-        
+
         <View style={styles.buttonArea}>
           <CustomButton title={"Clear"} onPress={this.clear} />
           <CustomButton title={this.state.button} onPress={this.start} />
@@ -100,7 +106,7 @@ const styles = StyleSheet.create({
   },
   timer: {
     position: "absolute",
-    top: 280,
+    top: 250,
     fontSize: 48,
     fontWeight: "bold",
     color: "green",
